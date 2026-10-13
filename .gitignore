@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>รามพร้อมสอบ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F6; --surface:#FFFFFF; --ink:#16213A; --muted:#5B6680; --line:#D5DBE6;
+  --navy:#1D2E57; --gold:#B8892B; --gold-soft:#F3E7C8; --ok:#1F7A4D; --warn:#B4441F;
+  --c-mth:#C2185B; --c-eng:#1A5FC4; --c-dig:#6B3FC2; --c-cos1:#1B7F45; --c-cos3:#C9620F;
+  --display:"Chakra Petch", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --body:"IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1424; --surface:#172038; --ink:#E7ECF6; --muted:#9AA6C0; --line:#2A3654;
+    --navy:#8FA8E8; --gold:#E0B656; --gold-soft:#3A3220; --ok:#5FD39A; --warn:#FF8A5C;
+    --c-mth:#FF6FA8; --c-eng:#6FA6FF; --c-dig:#B394FF; --c-cos1:#5FD39A; --c-cos3:#FFA65C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1424; --surface:#172038; --ink:#E7ECF6; --muted:#9AA6C0; --line:#2A3654;
+  --navy:#8FA8E8; --gold:#E0B656; --gold-soft:#3A3220; --ok:#5FD39A; --warn:#FF8A5C;
+  --c-mth:#FF6FA8; --c-eng:#6FA6FF; --c-dig:#B394FF; --c-cos1:#5FD39A; --c-cos3:#FFA65C;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:20px 16px 110px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.25}
+h1{font-size:1.6rem;font-weight:700;color:var(--navy)}
+h2{font-size:1.2rem;font-weight:700;margin:28px 0 10px}
+p{margin:0 0 8px}
+a{color:var(--navy)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:16px}
+.top small{color:var(--muted)}
+.view{display:none}.view.on{display:block}
+
+/* Ticket — the one memorable element */
+.ticket{background:var(--surface);border-radius:18px;position:relative;overflow:hidden;border:1px solid var(--line)}
+.ticket .stub{padding:18px 18px 16px;border-left:8px solid var(--accent,var(--navy))}
+.ticket .code{font-family:var(--display);font-size:2.4rem;font-weight:700;letter-spacing:.5px;color:var(--accent,var(--navy));line-height:1}
+.ticket .name{color:var(--muted);margin-top:4px}
+.ticket .when{font-family:var(--display);font-size:1.15rem;font-weight:600;margin-top:12px}
+.perf{height:0;border-top:2px dashed var(--line);margin:0 14px;position:relative}
+.perf::before,.perf::after{content:"";position:absolute;top:-12px;width:22px;height:22px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.perf::before{left:-26px}.perf::after{right:-26px}
+.seat{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 18px 18px}
+.seat label{display:block;font-size:.78rem;color:var(--muted)}
+.seat input{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 6px;font-family:var(--display);font-weight:600;font-size:1rem;text-align:center}
+.seat input::placeholder{color:var(--muted);opacity:.6;font-weight:500}
+.count{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px}
+.count div{min-width:70px}
+.count b{display:block;font-family:var(--display);font-size:1.5rem;line-height:1.1}
+.count span{font-size:.8rem;color:var(--muted)}
+.leave{margin:0 18px 16px;padding:12px 14px;border-radius:10px;background:var(--gold-soft);display:flex;gap:10px;align-items:center}
+.leave b{font-family:var(--display);font-size:1.2rem}
+.campus{margin-top:10px;display:inline-block;padding:4px 10px;border-radius:8px;font-weight:600;font-size:.9rem;background:var(--bg)}
+.campus.c2{background:var(--warn);color:var(--surface)}
+
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:12px 12px 12px 48px;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--surface);font-family:var(--display);font-weight:700;display:grid;place-items:center;font-size:.9rem}
+.steps li.done{opacity:.55}
+.steps li b{display:block}
+
+.row{display:flex;align-items:center;gap:12px;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
+.row .dot{width:10px;align-self:stretch;border-radius:6px;background:var(--accent)}
+.row .main{flex:1;min-width:0}
+.row .c{font-family:var(--display);font-weight:700;color:var(--accent)}
+.row .meta{font-size:.88rem;color:var(--muted)}
+.row.past{opacity:.5}
+.row.next{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-soft)}
+.tag{font-size:.75rem;padding:2px 8px;border-radius:99px;background:var(--gold-soft);color:var(--ink);white-space:nowrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:6px}
+.seg button{border:0;background:transparent;padding:4px 12px;cursor:pointer;font-size:.85rem}
+.seg button[aria-pressed="true"]{background:var(--navy);color:var(--surface)}
+
+.route{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.route h3{font-size:1.05rem;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.route h3 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:.82rem}
+.route ol{margin:8px 0 0;padding-left:20px}
+.route ol li{margin-bottom:4px}
+.note{font-size:.85rem;color:var(--muted);margin-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:10px;border:1px solid var(--navy);background:var(--navy);color:var(--surface);text-decoration:none;font-weight:600;cursor:pointer;margin:8px 8px 0 0}
+.btn.ghost{background:transparent;color:var(--navy)}
+
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--ok);flex:none;margin-top:2px}
+.check.on span{text-decoration:line-through;color:var(--muted)}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 14px}
+.progress i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+
+.week{display:grid;gap:10px}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.day h3{font-size:1rem;margin-bottom:6px}
+.cls{border-left:4px solid var(--accent);padding:4px 0 4px 10px;margin:6px 0}
+.cls b{font-family:var(--display);color:var(--accent)}
+.cls div{font-size:.88rem;color:var(--muted)}
+
+.links a.link{display:block;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;text-decoration:none;color:var(--ink)}
+.links a.link b{display:block;color:var(--navy)}
+.links a.link span{font-size:.86rem;color:var(--muted)}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+nav.tabs button{border:0;background:transparent;padding:10px 2px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.78rem;color:var(--muted)}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button[aria-selected="true"]{color:var(--navy);font-weight:600}
+nav.tabs button[aria-selected="true"] svg{stroke:var(--gold)}
+.empty{color:var(--muted);text-align:center;padding:24px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <h1>รามพร้อมสอบ</h1>
+    <small id="nowtxt"></small>
+  </div>
+
+  <!-- TODAY -->
+  <section class="view on" id="v-today" aria-label="วันนี้">
+    <div id="ticketWrap"></div>
+    <h2 id="todoTitle">ต้องทำตอนนี้</h2>
+    <ol class="steps" id="todo"></ol>
+  </section>
+
+  <!-- EXAMS -->
+  <section class="view" id="v-exams" aria-label="ตารางสอบ">
+    <h2 style="margin-top:0">ตารางสอบ ภาค 1/2569</h2>
+    <p class="note" style="margin-top:0">คาบ A สอบ 09.30–12.00 น. คาบ B สอบ 14.00–16.30 น. ที่นั่งดึงมาจาก e-Service แล้ว แตะวิชาเพื่อแก้ไข</p>
+    <div id="examList"></div>
+  </section>
+
+  <!-- TRAVEL -->
+  <section class="view" id="v-travel" aria-label="เดินทาง">
+    <h2 style="margin-top:0">สายไหม → ราม 1 หัวหมาก</h2>
+    <p class="note" style="margin-top:0">ยังไม่มีรถไฟฟ้าจอดหน้ามอ ทุกเส้นทางต้องต่อรถช่วงท้าย เผื่อเวลาอย่างน้อย 2 ชั่วโมงในวันแรก</p>
+
+    <div class="route">
+      <h3>รถเมล์สาย 95 <small>ถูกสุด ช้าสุด</small></h3>
+      <ol>
+        <li>นั่งสองแถวหรือวินจากสายไหมอเวนิว ไปออกถนนรามอินทราแถวสถานีวัชรพล</li>
+        <li>ขึ้นสาย 95 (อู่บางเขน–ม.รามคำแหง) นั่งยาวถึงหน้ามอ</li>
+        <li>ลงป้ายหน้ามอ แล้วเดินเข้าไปหาตึกสอบ</li>
+      </ol>
+      <p class="note">เลขสายรถเมล์เปลี่ยนบ่อย ให้เช็คใน ViaBus ก่อนออกจากบ้านทุกครั้ง</p>
+      <a class="btn" href="https://www.viabus.co/" target="_blank" rel="noopener">เปิด ViaBus</a>
+    </div>
+
+    <div class="route">
+      <h3>รถไฟฟ้า + รถเมล์ <small>คุมเวลาได้ แพงกว่า</small></h3>
+      <ol>
+        <li>BTS สายสีเขียวฝั่งพหลโยธิน ลงห้าแยกลาดพร้าว</li>
+        <li>เปลี่ยน MRT สายสีน้ำเงิน ไปสถานีลาดพร้าว</li>
+        <li>ต่อสายสีเหลือง ลงสถานีรามคำแหงหรือแยกลำสาลี</li>
+        <li>ต่อรถเมล์สายไหนก็ได้ที่มุ่งหน้า ม.รามคำแหง</li>
+      </ol>
+    </div>
+
+    <div class="route">
+      <h3>มอไซค์รับจ้างผ่านแอป <small>แผนสำรอง</small></h3>
+      <ol>
+        <li>ใช้เมื่อเห็นว่าจะไม่ทัน เช่นอีก 1 ชั่วโมงจะสอบแต่ยังอยู่ไกล</li>
+        <li>ตั้งปลายทางเป็น "มหาวิทยาลัยรามคำแหง หัวหมาก" ระวังอย่าเลือกราม 2 บางนา</li>
+      </ol>
+    </div>
+
+    <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B8%B2%E0%B8%A5%E0%B8%B1%E0%B8%A2%E0%B8%A3%E0%B8%B2%E0%B8%A1%E0%B8%84%E0%B8%B3%E0%B9%81%E0%B8%AB%E0%B8%87+%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%A1%E0%B8%B2%E0%B8%81&travelmode=transit" target="_blank" rel="noopener">นำทางด้วย Google Maps</a>
+    <a class="btn ghost" href="https://www.aroundram.com/gotoru" target="_blank" rel="noopener">คู่มือเดินทางรอบรั้วรามฯ</a>
+
+    <h2>วันที่สอบที่ ราม 2 บางนา (17 และ 20 ต.ค.)</h2>
+    <p class="note" style="margin-top:0">ราม 2 อยู่ไกลจากสายไหมมาก ออกจากบ้านก่อนสอบอย่างน้อย 3.5 ชั่วโมง</p>
+    <div class="route">
+      <h3>ผ่านหน้าราม 1 <small>ใช้เส้นทางที่คุ้นแล้ว</small></h3>
+      <ol>
+        <li>ไปหน้าราม 1 หัวหมาก ตามเส้นทางปกติ</li>
+        <li>ต่อรถเมล์สาย 3-21 (เดิมสาย 207) ราม 1–ราม 2</li>
+      </ol>
+    </div>
+    <div class="route">
+      <h3>ผ่านแอร์พอร์ตลิงก์หัวหมาก <small>ทางเลือก</small></h3>
+      <ol>
+        <li>ไปสถานีแอร์พอร์ตลิงก์หัวหมาก</li>
+        <li>ต่อสองแถวสาย 1013 หัวหมาก–ประเวศ–ราม 2</li>
+      </ol>
+      <p class="note">เช็คเลขสายใน ViaBus ก่อนวันสอบ</p>
+    </div>
+    <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=มหาวิทยาลัยรามคำแหง+บางนา&travelmode=transit" target="_blank" rel="noopener">นำทางไปราม 2 บางนา</a>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section class="view" id="v-prep" aria-label="เตรียมตัว">
+    <h2 style="margin-top:0">ก่อนออกจากบ้าน</h2>
+    <div class="progress"><i id="prog"></i></div>
+    <div id="checks"></div>
+    <button class="btn ghost" id="resetChecks" type="button">เริ่มเช็คลิสต์ใหม่สำหรับวิชาถัดไป</button>
+
+    <h2>ลิงก์ที่ต้องใช้</h2>
+    <div class="links">
+      <a class="link" href="https://beta-e-service.ru.ac.th" target="_blank" rel="noopener"><b>RU e-Service</b><span>ดูตึก ห้อง แถว ที่นั่งสอบ ล็อกอินด้วยรหัสนักศึกษา</span></a>
+      <a class="link" href="https://app.aroundram.com/RuExamNavigator.html" target="_blank" rel="noopener"><b>RU Exam Navigator</b><span>หาว่าตึกสอบอยู่ตรงไหนในมอ</span></a>
+      <a class="link" href="https://x.com/prramru" target="_blank" rel="noopener"><b>PR ม.รามคำแหง (X)</b><span>ประกาศด่วน เช่นย้ายห้องสอบหลังน้ำท่วม</span></a>
+      <a class="link" href="http://ru.ac.th/th/Mr30" target="_blank" rel="noopener"><b>ตาราง ม.ร.30</b><span>วันสอบและคาบสอบของทุกวิชา</span></a>
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section class="view" id="v-class" aria-label="ตารางเรียน">
+    <h2 style="margin-top:0">ตารางเรียน</h2>
+    <div class="week" id="week"></div>
+  </section>
+</main>
+
+<nav class="tabs" aria-label="เมนู">
+  <div class="in" role="tablist">
+    <button role="tab" data-v="today" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 0 2-2V6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v1a2 2 0 0 0 2 2v6a2 2 0 0 0-2 2v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-1a2 2 0 0 0-2-2z"/><path d="M13 5v2M13 11v2M13 17v2"/></svg>วันนี้</button>
+    <button role="tab" data-v="exams" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>สอบ</button>
+    <button role="tab" data-v="travel" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="2"/><path d="M4 11h16M8 21l2-4M16 21l-2-4"/><circle cx="8.5" cy="14" r=".5"/><circle cx="15.5" cy="14" r=".5"/></svg>เดินทาง</button>
+    <button role="tab" data-v="prep" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>เตรียมตัว</button>
+    <button role="tab" data-v="class" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v14a2 2 0 0 0-2-2H2zM22 4h-7a3 3 0 0 0-3 3v14a2 2 0 0 1 2-2h8z"/></svg>เรียน</button>
+  </div>
+</nav>
+
+<script>
+(function(){
+  const LEAVE_MIN = {1:150, 2:210}; // ราม 1 ออกก่อน 2.5 ชม. ราม 2 ออกก่อน 3.5 ชม.
+  const store = {
+    get(k, d){ try{ const v = localStorage.getItem('ram:'+k); return v==null ? d : JSON.parse(v); }catch(e){ return d; } },
+    set(k, v){ try{ localStorage.setItem('ram:'+k, JSON.stringify(v)); }catch(e){} }
+  };
+
+  const W_VPB = 'เข้าประตูหน้าฝั่งถนนรามคำแหง เลี้ยวซ้ายเดินไปจนสุดฝั่งซ้ายของมอ ผ่านตึก ROB และ KLB ตึก VPB (อาคารเรียงผา) อยู่มุมซ้าย ติดอาคารจอดรถและใกล้ RPB สำนักพิมพ์';
+  const W_SBB = 'เข้าประตูหน้า เดินตรงขึ้นไปทางซ้ายของสระน้ำยาวกลางมอ ตึก SBB อยู่ติดหอประชุมพ่อขุน ก่อนถึงวงเวียนอนุสาวรีย์';
+  const W_PBB = 'ตึก PBB อยู่ที่ราม 2 บางนา แผนที่ราม 1 ใช้ไม่ได้ ถึงแล้วให้ถามเจ้าหน้าที่หน้าประตู';
+  const EXAMS = [
+    {id:'MTH1101', name:'แคลคูลัสและเรขาคณิตวิเคราะห์', date:'2026-10-14', slot:'B', color:'--c-mth', campus:1, seat:{b:'VPB',r:'502',row:'05',seat:'14'}, q:'ปรนัย 50 ข้อ', walk:W_VPB},
+    {id:'RAM1111', name:'ภาษาอังกฤษ', date:'2026-10-17', slot:'B', color:'--c-eng', campus:2, seat:{b:'PBB',r:'501',row:'23',seat:'16'}, q:'ปรนัย 120 ข้อ', walk:W_PBB},
+    {id:'RAM1131', name:'ทักษะความเข้าใจดิจิทัล', date:'2026-10-20', slot:'B', color:'--c-dig', campus:2, seat:{b:'PBB',r:'501',row:'24',seat:'09'}, q:'ปรนัย 120 ข้อ', walk:W_PBB},
+    {id:'COS1101', name:'วิทยาการคอมฯ', date:'2026-10-25', slot:'B', color:'--c-cos1', campus:1, seat:{b:'VPB',r:'401',row:'30',seat:'29'}, q:'ปรนัย 120 ข้อ', walk:W_VPB},
+    {id:'COS1103', name:'อัลกอริทึมและการเขียนโปรแกรม', date:'2026-10-28', slot:'A', color:'--c-cos3', campus:1, seat:{b:'SBB',r:'501',row:'21',seat:'20'}, q:'อัตนัย 5 ข้อ', walk:W_SBB}
+  ];
+  const SLOT = {A:{s:'09:30', e:'12:00'}, B:{s:'14:00', e:'16:30'}};
+
+  const CLASSES = {
+    'จันทร์':[{id:'RAM1111', t:'08.30–11.00', n:'ภาษาอังกฤษฯ', r:'KTB201', color:'--c-eng'}],
+    'อังคาร':[
+      {id:'COS1101 (LEC)', t:'09.30–11.20', n:'วิทยาการคอมฯ', r:'SCL204', color:'--c-cos1'},
+      {id:'COS1103', t:'11.30–13.20', n:'อัลกอริทึมฯ', r:'SCL204', color:'--c-cos3'},
+      {id:'COS1101 (LAB)', t:'13.30–15.20', n:'วิทยาการคอมฯ', r:'SCL211/2', color:'--c-cos1'}],
+    'พุธ':[],
+    'พฤหัสบดี':[{id:'MTH1101', t:'13.50–16.20', n:'แคลคูลัสฯ', r:'KTB401', color:'--c-mth'}],
+    'ศุกร์':[{id:'RAM1131', t:'11.10–13.40', n:'ทักษะดิจิทัล', r:'KTB201', color:'--c-dig'}]
+  };
+
+  const CHECKS = [
+    'เช็คตึก ห้อง แถว ที่นั่งใน e-Service แล้วกรอกในแอปนี้',
+    'เช็คประกาศ PR ม.รามฯ ว่ามีการย้ายห้องสอบไหม',
+    'พิมพ์หรือแคปตารางสอบจาก e-Service (ปุ่ม "พิมพ์ตารางสอบ") ติดตัวไป พร้อมจดรหัสนักศึกษา',
+    'บัตรประชาชน หรือบัตรที่มีรูปถ่ายอื่น ใช้ยืนยันตัวตน (พรีดีกรีอาจไม่มีบัตรนักศึกษา)',
+    'ใบเสร็จลงทะเบียนหรือหลักฐานเข้าสอบ',
+    'ดินสอ 2B อย่างน้อย 2 แท่ง กบเหลา ยางลบ',
+    'ปากกา',
+    'นาฬิกาข้อมือแบบเข็มหรือดิจิทัลธรรมดา (ห้ามใช้มือถือดูเวลาในห้องสอบ)',
+    'ชาร์จมือถือเต็ม และมีเงินสดสำรองค่ารถ',
+    'น้ำดื่ม และกินข้าวก่อนออกจากบ้าน'
+  ];
+
+  const $ = s => document.querySelector(s);
+  const tz = {timeZone:'Asia/Bangkok'};
+  const fmtDate = d => d.toLocaleDateString('th-TH', {...tz, weekday:'short', day:'numeric', month:'short'});
+  const fmtTime = d => d.toLocaleTimeString('th-TH', {...tz, hour:'2-digit', minute:'2-digit'}) + ' น.';
+  const at = (date, hm) => new Date(date+'T'+hm+':00+07:00');
+
+  function slotOf(ex){
+    if (ex.slot !== 'AB') return ex.slot;
+    return store.get('slot:'+ex.id, null); // 'A' | 'B' | null
+  }
+  function timesOf(ex){
+    const sl = slotOf(ex);
+    const key = sl || 'A'; // ยังไม่รู้คาบ ให้วางแผนตามคาบเช้าไว้ก่อน
+    const start = at(ex.date, SLOT[key].s), end = at(ex.date, SLOT[key].e);
+    return {sl, start, end, leave:new Date(start.getTime()-LEAVE_MIN[ex.campus]*60000)};
+  }
+  function nextExam(now){
+    return EXAMS.find(ex => timesOf(ex).end > now) || null;
+  }
+  const seatKey = id => 'seat:'+id;
+  EXAMS.forEach(ex=>{ const cur = store.get(seatKey(ex.id), null); if (!cur || !cur.b) store.set(seatKey(ex.id), ex.seat); });
+
+  function seatFields(ex){
+    const s = store.get(seatKey(ex.id), {b:'',r:'',row:'',seat:''});
+    const f = (k, label, ph) => `<div><label for="${ex.id}-${k}">${label}</label><input id="${ex.id}-${k}" data-ex="${ex.id}" data-k="${k}" value="${(s[k]||'').replace(/"/g,'&quot;')}" placeholder="${ph}" autocomplete="off"></div>`;
+    return f('b','ตึก','SBB') + f('r','ห้อง','201') + f('row','แถว','–') + f('seat','ที่นั่ง','–');
+  }
+  function bindSeat(root){
+    root.querySelectorAll('input[data-ex]').forEach(inp=>{
+      inp.addEventListener('input', ()=>{
+        const id = inp.dataset.ex, cur = store.get(seatKey(id), {});
+        cur[inp.dataset.k] = inp.value.trim().toUpperCase();
+        store.set(seatKey(id), cur);
+        document.querySelectorAll(`input[data-ex="${id}"][data-k="${inp.dataset.k}"]`).forEach(o=>{ if(o!==inp) o.value = inp.value; });
+        renderTodo();
+      });
+    });
+  }
+  function hasSeat(id){ const s = store.get(seatKey(id), {}); return !!(s.b && s.r); }
+
+  function renderTicket(){
+    const now = new Date(), ex = nextExam(now), wrap = $('#ticketWrap');
+    if (!ex){ wrap.innerHTML = '<div class="ticket"><div class="stub"><div class="code">สอบครบแล้ว</div><p class="name">จบภาค 1/2569 รอดูผลสอบใน e-Service</p></div></div>'; return; }
+    const t = timesOf(ex), accent = `var(${ex.color})`;
+    const slotTxt = t.sl ? `คาบ ${t.sl}` : 'คาบ A หรือ B (ยังไม่ได้เลือก)';
+    wrap.innerHTML = `
+      <article class="ticket" style="--accent:${accent}" aria-label="วิชาสอบถัดไป">
+        <div class="stub">
+          <div class="code">${ex.id}</div>
+          <div class="name">${ex.name}</div>
+          <div class="when">${fmtDate(t.start)} · ${fmtTime(t.start)}–${fmtTime(t.end)}</div>
+          <div class="note" style="margin-top:2px">${slotTxt} · ${ex.q}</div>
+          <div class="campus c${ex.campus}">${ex.campus===2?'สอบที่ ราม 2 บางนา ไม่ใช่หัวหมาก':'สอบที่ ราม 1 หัวหมาก'}</div>
+          <p class="note" style="margin:8px 0 0"><b>ทางไปตึก:</b> ${ex.walk}</p>
+          <div class="count" id="count"></div>
+        </div>
+        <div class="leave"><span>ออกจากบ้านไม่เกิน</span><b>${fmtTime(t.leave)}</b></div>
+        <div class="perf" aria-hidden="true"></div>
+        <div class="seat">${seatFields(ex)}</div>
+      </article>`;
+    bindSeat(wrap);
+    tick();
+  }
+  function tick(){
+    const now = new Date(), ex = nextExam(now), el = $('#count');
+    $('#nowtxt').textContent = now.toLocaleString('th-TH', {...tz, weekday:'short', hour:'2-digit', minute:'2-digit'});
+    if (!ex || !el) return;
+    const t = timesOf(ex);
+    if (now >= t.start){ el.innerHTML = '<div><b>กำลังสอบ</b><span>หมดเวลา '+fmtTime(t.end)+'</span></div>'; return; }
+    let ms = t.start - now;
+    const d = Math.floor(ms/864e5); ms -= d*864e5;
+    const h = Math.floor(ms/36e5); ms -= h*36e5;
+    const m = Math.floor(ms/6e4);
+    el.innerHTML = (d? `<div><b>${d}</b><span>วัน</span></div>`:'') + `<div><b>${h}</b><span>ชั่วโมง</span></div><div><b>${m}</b><span>นาที</span></div>`;
+  }
+
+  function renderTodo(){
+    const now = new Date(), ex = nextExam(now), ol = $('#todo');
+    if (!ex){ $('#todoTitle').textContent = 'ต่อจากนี้'; ol.innerHTML = '<li><b>ตามดูผลสอบ</b>ผลสอบไม่เป็นทางการจะขึ้นใน e-Service</li>'; return; }
+    const t = timesOf(ex);
+    const examDay = at(ex.date, '00:00');
+    const checks = store.get('checks', []);
+    const ready = checks.length >= CHECKS.length;
+    const items = [];
+    if (ex.slot === 'AB' && !t.sl) items.push({b:'เลือกว่าคุณสอบคาบไหน', d:'วิชานี้มีทั้งคาบ A และ B ขึ้นกับรหัสนักศึกษา ดูใน e-Service แล้วเลือกที่แท็บ "สอบ"'});
+    if (now < t.leave){
+      items.push({b:'เช็คที่นั่งสอบใน e-Service', d:'กรอกตึกและห้องลงในบัตรด้านบน', done:hasSeat(ex.id)});
+      items.push({b:'หาตำแหน่งตึกด้วย RU Exam Navigator', d:'จะได้รู้ว่าลงรถแล้วเดินไปทางไหน'});
+      items.push(ex.campus===2 ? {b:'วางเส้นทางไปราม 2 บางนา', d:'ไกลกว่าหัวหมากมาก ดูแท็บ "เดินทาง" ส่วนราม 2'} : {b:'เช็คเส้นทางใน ViaBus', d:'ดูว่าสาย 95 หรือสายที่ใช้ยังวิ่งปกติ (แท็บ "เดินทาง")'});
+      items.push({b:'เตรียมของตามเช็คลิสต์', d:'แท็บ "เตรียมตัว"', done:ready});
+      items.push({b:'ออกจากบ้านก่อน '+fmtTime(t.leave), d: now < examDay ? 'คืนนี้นอนให้พอ ตั้งนาฬิกาปลุกไว้ด้วย' : 'ถ้าช้ากว่านี้ให้เตรียมใช้มอไซค์ผ่านแอป'});
+    } else if (now < t.start){
+      items.push({b:'อยู่ระหว่างเดินทาง', d:'ถ้าเหลือไม่ถึง 1 ชั่วโมงแต่ยังอยู่ไกล ให้ลงแล้วกดมอไซค์ต่อ'});
+      items.push({b:'ถึงแล้วให้หาตึก '+(store.get(seatKey(ex.id),{}).b||'ตามที่ระบบบอก'), d:'ไปถึงหน้าห้องก่อนสอบ 15–30 นาที'});
+      items.push({b:'ปิดเสียงมือถือก่อนเข้าห้อง', d:'เอาบัตรประชาชนกับตารางสอบที่พิมพ์หรือแคปไว้วางบนโต๊ะ'});
+    } else {
+      items.push({b:'ตั้งใจทำข้อสอบ', d:'ฝนกระดาษคำตอบให้ครบ เขียนชื่อ รหัส และรหัสวิชาให้ถูก'});
+    }
+    $('#todoTitle').textContent = now < examDay ? 'ต้องทำก่อนวันสอบ' : 'ต้องทำวันนี้';
+    ol.innerHTML = items.map(i=>`<li class="${i.done?'done':''}"><b>${i.done?'✓ ':''}${i.b}</b>${i.d}</li>`).join('');
+  }
+
+  function renderExams(){
+    const now = new Date(), nx = nextExam(now), box = $('#examList');
+    box.innerHTML = EXAMS.map(ex=>{
+      const t = timesOf(ex), past = t.end <= now, isNext = nx && nx.id===ex.id;
+      const s = store.get(seatKey(ex.id), {});
+      const seatTxt = s.b ? `ตึก ${s.b} ห้อง ${s.r||'–'} แถว ${s.row||'–'} ที่นั่ง ${s.seat||'–'}` : 'ยังไม่ได้กรอกที่นั่ง';
+      const slotPick = ex.slot==='AB' ? `<div class="seg" role="group" aria-label="เลือกคาบสอบ ${ex.id}">
+          <button type="button" data-slot="A" data-ex="${ex.id}" aria-pressed="${t.sl==='A'}">คาบ A เช้า</button>
+          <button type="button" data-slot="B" data-ex="${ex.id}" aria-pressed="${t.sl==='B'}">คาบ B บ่าย</button></div>` : '';
+      const timeTxt = (ex.slot==='AB' && !t.sl) ? 'เลือกคาบด้านล่าง' : `${fmtTime(t.start)}–${fmtTime(t.end)}`;
+      return `<div class="row ${past?'past':''} ${isNext?'next':''}" style="--accent:var(${ex.color})">
+        <div class="dot"></div>
+        <div class="main">
+          <div class="c">${ex.id}</div>
+          <div>${ex.name}</div>
+          <div class="meta">${fmtDate(t.start)} · ${timeTxt}</div>
+          <div class="meta">${seatTxt}</div>
+          <div class="meta"><b style="color:${ex.campus===2?'var(--warn)':'var(--ok)'}">${ex.campus===2?'ราม 2 บางนา':'ราม 1 หัวหมาก'}</b> · ${ex.q}</div>
+          ${slotPick}
+        </div>
+        ${isNext?'<span class="tag">ถัดไป</span>':past?'<span class="tag">สอบแล้ว</span>':''}
+      </div>`;
+    }).join('');
+    box.querySelectorAll('[data-slot]').forEach(b=>b.addEventListener('click',()=>{
+      store.set('slot:'+b.dataset.ex, b.dataset.slot); renderAll();
+    }));
+    box.querySelectorAll('.row').forEach((row,i)=>row.addEventListener('click',e=>{
+      if (e.target.closest('button')) return;
+      const ex = EXAMS[i];
+      if (row.querySelector('.seat')) return;
+      const div = document.createElement('div'); div.className='seat'; div.style.padding='10px 0 0';
+      div.innerHTML = seatFields(ex); row.querySelector('.main').appendChild(div); bindSeat(div);
+      div.querySelector('input').focus();
+    }));
+  }
+
+  function renderChecks(){
+    const done = store.get('checks', []);
+    $('#checks').innerHTML = CHECKS.map((c,i)=>`<label class="check ${done.includes(i)?'on':''}"><input type="checkbox" data-i="${i}" ${done.includes(i)?'checked':''}><span>${c}</span></label>`).join('');
+    $('#prog').style.width = (done.length/CHECKS.length*100)+'%';
+    $('#checks').querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{
+      let d = store.get('checks', []); const i = +inp.dataset.i;
+      d = inp.checked ? [...new Set([...d,i])] : d.filter(x=>x!==i);
+      store.set('checks', d); renderChecks(); renderTodo();
+    }));
+  }
+  $('#resetChecks').addEventListener('click',()=>{ store.set('checks', []); renderChecks(); renderTodo(); });
+
+  function renderWeek(){
+    $('#week').innerHTML = Object.entries(CLASSES).map(([d,list])=>`
+      <div class="day"><h3>${d}</h3>${list.length? list.map(c=>`<div class="cls" style="--accent:var(${c.color})"><b>${c.id}</b> ${c.t}<div>${c.n} · ห้อง ${c.r}</div></div>`).join('') : '<div class="note" style="margin:0">ว่าง</div>'}</div>`).join('');
+  }
+
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected', x===b));
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+b.dataset.v));
+    if (b.dataset.v==='exams') renderExams();
+    window.scrollTo(0,0);
+  }));
+
+  function renderAll(){ renderTicket(); renderTodo(); renderExams(); renderChecks(); renderWeek(); }
+  renderAll();
+  setInterval(()=>{ tick(); }, 30000);
+})();
+</script>
+</body>
+</html>
